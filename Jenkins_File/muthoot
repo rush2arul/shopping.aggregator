@@ -1,0 +1,50 @@
+pipeline {
+  agent any
+  triggers {
+    GenericTrigger(
+     genericVariables: [
+      [key: 'ref', value: '$.ref']
+     ],
+
+     causeString: 'Triggered on $ref',
+
+     token: 'NEW_PIPE',
+     tokenCredentialId: '',
+
+     printContributedVariables: true,
+     printPostContent: true,
+
+     silentResponse: false,
+
+     regexpFilterText: 'refs/heads/develop',
+     regexpFilterExpression: 'refs/heads/' + BRANCH_NAME
+    )
+  }
+  stages {
+    stage('Validation') {
+      steps {
+        sh "echo Validation"
+      	   }
+    }
+
+    stage('Build') {
+      steps {
+	 dir('src')
+        	{       
+		sh '/usr/local/bin/docker-compose up --build'
+        	}
+
+      }
+    }
+    stage('Deploy') {
+      steps {
+
+	 dir('src')
+	        {       
+        	echo 'Deploy'  
+        	}
+
+      	}
+    		}
+  	}
+}
