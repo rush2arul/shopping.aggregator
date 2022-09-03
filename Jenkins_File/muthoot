@@ -41,8 +41,10 @@ pipeline {
 
 	 dir('src')
 	        {       
-        	echo 'Deploy'  
-        	}
+			sh '/home/arul/MUTHOOT/CUSTOM/DOCKER_COMPOSE/stopbyname.sh shopping.aggregator' 
+			sh 'docker run -d --env-file env.shopping.aggregator  -p "8005:80"  --name shopping.aggregator '
+			echo 'Deploy'  
+			}
 
       	}
     		}
